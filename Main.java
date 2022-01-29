@@ -6,5 +6,7 @@ class Main {
 			Array.add(((int)(Math.random()*1800)-900));
 		}
     System.out.println(Array);
+		System.out.println(Array.remove(0));
+		System.out.println(Array);
   }
 }

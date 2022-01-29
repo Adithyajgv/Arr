@@ -1,7 +1,7 @@
 class Arr <dataType> {
 
-  public Object[] data;
-  public Object[] data0;
+  private Object[] data;
+  private Object[] data0;
   private int len =0;
  
   public Arr(int d){ 
@@ -36,9 +36,15 @@ class Arr <dataType> {
     for(int i=min; i<= max; i++){
       d[i] = data[i];
     }
-    dataType[] out = (dataType[]) data;
+    dataType[] out = (dataType[]) d;
     return out;
   }
+
+	public dataType[] get(){
+		@SuppressWarnings("unchecked")
+		dataType[] out = (dataType[]) data;
+		return out;
+	}
 
   public void add(dataType d){
     int open = 0;
@@ -51,10 +57,7 @@ class Arr <dataType> {
     len++;
     data0[open] = d;
     data = data0;
-    data0 = new Object[data.length +1];
-    for(int i =0; i<data.length; i++){
-      data0[i] = data[i];
-    }
+    set0();
   }
 
   public void add(int index, dataType d){
@@ -63,13 +66,33 @@ class Arr <dataType> {
       data0[i+1] = data[i];
     }
     data = data0;
-    data0 = new Object[data.length+1];
+    set0();
+  }
+
+	public String remove(int index){
+		@SuppressWarnings("unchecked")
+		String out = "" +data[index];
+		data	= new Object[data.length-1];
+		for(int i =0; i<index; i++){
+			data[i] = data0[i];
+		}
+		data[index] = data0[index+1];
+		for(int i= index+1; i<data.length; i++){
+			data[i] = data0[i+1];
+		}
+		set0();
+		len--;
+		return out;
+	}
+
+	private void set0(){
+		data0 = new Object[data.length+1];
     for(int i =0; i<data.length; i++){
       data0[i] = data[i];
     }
-  }
-
-  public int size(){
+	}
+	
+	public int size(){
     return len;
   }
 
