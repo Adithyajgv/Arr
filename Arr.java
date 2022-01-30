@@ -7,7 +7,7 @@ class Arr <dataType> {
   public Arr(int d){ 
     data = new Object[d];   
     data0 = new Object[d+1];
-    len = d;
+    len = d-1;
   }
   public Arr(){ 
     data = new Object[1];   
@@ -65,6 +65,7 @@ class Arr <dataType> {
     for(int i=index; i<data.length;i++){
       data0[i+1] = data[i];
     }
+		len++;
     data = data0;
     set0();
   }
@@ -76,12 +77,11 @@ class Arr <dataType> {
 		for(int i =0; i<index; i++){
 			data[i] = data0[i];
 		}
-		data[index] = data0[index+1];
 		for(int i= index+1; i<data.length; i++){
 			data[i] = data0[i+1];
 		}
-		set0();
 		len--;
+		set0();
 		return out;
 	}
 
