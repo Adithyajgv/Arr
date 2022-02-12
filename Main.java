@@ -11,5 +11,6 @@ class Main {
 		System.out.println(Array.remove(Array.size()-1));
 		System.out.println(Array.get(Array.size()-1));
 		System.out.println(Array);
+		Array.save("test");
   }
 }

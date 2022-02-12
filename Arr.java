@@ -1,8 +1,17 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
+
 class Arr <dataType> {
 
   private Object[] data;
   private Object[] data0;
   private int len =0;
+	private static int id =1;
  
   public Arr(int d){ 
     data = new Object[d];   
@@ -69,6 +78,64 @@ class Arr <dataType> {
     data = data0;
     set0();
   }
+
+	/*
+	public void read(Path path){
+	}
+	*/
+
+	public void save(String name){
+
+		Path path = makeFile(name);
+		File file = new File(path.toString());
+		try{
+			FileWriter fr = new FileWriter(file, true);
+			fr.write("<" + id+ "," + this.data.length + ">=[");
+			id++;
+			fr.close();
+		}
+		catch(IOException e){
+			System.out.println("please enter a valid path");
+		}
+		for(int i=0;i<data.length;i++){
+			try{
+				FileWriter fr = new FileWriter(file, true);
+
+				if(i != data.length-1){
+					fr.write("{" + data[i]+"},");
+				} else{
+					fr.write("{" + data[i]+"}]");
+				}
+				fr.close();
+			}
+			catch(IOException e){
+				break;
+			}
+		}
+
+	}
+
+	private Path makeFile(String name){
+		@SuppressWarnings("unchecked")
+		int o =1;
+		File myArr;
+		try{
+			myArr = new File("./Data/"+ name +".arr");
+			if(myArr.createNewFile()){
+
+			}
+			else{
+				name = name+o;
+				o++;
+				makeFile(name);
+			}
+		}
+		catch(IOException e){
+			System.out.println("Error");
+		}
+		Path path = Paths.get("./Data/"+name+".arr");
+		return path;
+	}
 
 	public String remove(int index){
 		@SuppressWarnings("unchecked")
