@@ -50,6 +50,7 @@ class Arr <dataType> {
 		len = len-1;
 
 		data = temp.split("},{");
+		data0= temp.split("},{");
 		}
   }
 
