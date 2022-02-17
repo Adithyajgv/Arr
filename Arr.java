@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
@@ -11,13 +12,47 @@ class Arr <dataType> {
   private Object[] data;
   private Object[] data0;
   private int len =0;
-	private static int id =1;
+	private int id;
+
+	
  
   public Arr(int d){ 
     data = new Object[d];   
     data0 = new Object[d+1];
     len = d-1;
   }
+
+	public Arr(Path path){ 
+    String temp = load(path);
+		int t =0;
+		for(int i =1; i<temp.length(); i++){
+			if(temp.substring(i,i+1).equals(",")){
+				t =i;
+				break;
+			}
+		}
+
+		this.id = Integer.parseInt(temp.substring(1,t));
+		temp = temp.substring(t+1);
+
+		for(int i =1; i<temp.length(); i++){
+			if(temp.substring(i,i+1).equals(">")){
+				t =i;
+				break;
+			}
+
+		this.len  = Integer.parseInt(temp.substring(0,t));
+		temp = temp.substring(t+4);
+		temp = temp.substring(0,temp.length()-3);
+
+		data = new Object[len];
+		data0 = new Object[len+1];
+		len = len-1;
+
+		data = temp.split("},{");
+		}
+  }
+
   public Arr(){ 
     data = new Object[1];   
     data0 = new Object[1];   
@@ -79,17 +114,34 @@ class Arr <dataType> {
     set0();
   }
 
-	/*
-	public void read(Path path){
+
+	private String load(Path path){
+		//@SuppressWarnings("unchecked")
+		try{
+			File file = new File(path.toString());
+			FileReader reader = new FileReader(file);
+
+			int d;
+			String out = new String();
+			while ((d = reader.read()) != -1){
+				char temp = (char)d;
+				out+=temp;
+			}
+			reader.close();
+			return out;
+
+		} catch(IOException e){
+			System.out.println(e);
+			return "";
+		}
 	}
-	*/
 
 	public void save(String name){
 
 		Path path = makeFile(name);
 		File file = new File(path.toString());
 		try{
-			FileWriter fr = new FileWriter(file, true);
+			FileWriter fr = new FileWriter(file, false);
 			fr.write("<" + id+ "," + this.data.length + ">=[");
 			id++;
 			fr.close();
@@ -121,17 +173,20 @@ class Arr <dataType> {
 		File myArr;
 		try{
 			myArr = new File("./Data/"+ name +".arr");
-			if(myArr.createNewFile()){
-
-			}
-			else{
-				name = name+o;
+				/*name = name+o;
 				o++;
-				makeFile(name);
+				makeFile(name);*/
+			boolean t = myArr.createNewFile();
+			while(!t){
+				myArr = new File("./data/" +name+o+".arr");
+				o++;
+				t = myArr.createNewFile();
+				System.out.println(t);
 			}
+			name = name+o;
 		}
 		catch(IOException e){
-			System.out.println("Error");
+			System.out.println(e);
 		}
 		Path path = Paths.get("./Data/"+name+".arr");
 		return path;

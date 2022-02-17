@@ -1,8 +1,8 @@
 class Main {
   public static void main(String[] args) {
-    Integer a = ((int)(Math.random()*200)+1);
+    //Integer a = ((int)(Math.random()*200)+1);
     Arr<Integer> Array = new Arr<Integer>();
-    for(int i =0; i<=a ; i++){
+    for(int i =0; i<=100 ; i++){
 			Array.add(((int)(Math.random()*1800)-900));
 		}
     System.out.println(Array);
