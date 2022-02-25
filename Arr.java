@@ -22,35 +22,44 @@ class Arr <dataType> {
     len = d-1;
   }
 
-	public Arr(Path path){ 
-    String temp = load(path);
-		int t =0;
-		for(int i =1; i<temp.length(); i++){
-			if(temp.substring(i,i+1).equals(",")){
-				t =i;
-				break;
+	public Arr(String path){ 
+		try{
+			String temp = load(path);
+			temp = temp.substring(1,temp.length()-1);
+			int t =0;
+			for(int i =0; i<temp.length(); i++){
+				if(temp.substring(i,i+1).equals(",")){
+					t =i;
+					break;
+				}
 			}
+
+			this.id = Integer.parseInt(temp.substring(0,t));
+			temp = temp.substring(t+1);
+
+			for(int i =0; i<temp.length(); i++){
+				if(temp.substring(i,i+1).equals(">")){
+					t =i;
+					break;
+				}
+			}
+			this.len  = Integer.parseInt(temp.substring(0,t));
+			temp = temp.substring(t+4);
+			temp = temp.substring(0,temp.length()-1);
+
+			data = new Object[len];
+			data0 = new Object[len+1];
+			len = len-1;
+
+			temp = temp.replace("}","");
+			temp = temp.replace("{","");
+			
+			//System.out.println(temp);
+			data = temp.split(",");
+			data0= temp.split(",");
 		}
-
-		this.id = Integer.parseInt(temp.substring(1,t));
-		temp = temp.substring(t+1);
-
-		for(int i =1; i<temp.length(); i++){
-			if(temp.substring(i,i+1).equals(">")){
-				t =i;
-				break;
-			}
-
-		this.len  = Integer.parseInt(temp.substring(0,t));
-		temp = temp.substring(t+4);
-		temp = temp.substring(0,temp.length()-3);
-
-		data = new Object[len];
-		data0 = new Object[len+1];
-		len = len-1;
-
-		data = temp.split("},{");
-		data0= temp.split("},{");
+		catch(Exception e){
+			throw e;
 		}
   }
 
@@ -116,10 +125,10 @@ class Arr <dataType> {
   }
 
 
-	private String load(Path path){
+	private String load(String path){
 		//@SuppressWarnings("unchecked")
 		try{
-			File file = new File(path.toString());
+			File file = new File(path);
 			FileReader reader = new FileReader(file);
 
 			int d;
@@ -178,13 +187,16 @@ class Arr <dataType> {
 				o++;
 				makeFile(name);*/
 			boolean t = myArr.createNewFile();
-			while(!t){
-				myArr = new File("./data/" +name+o+".arr");
-				o++;
-				t = myArr.createNewFile();
-				System.out.println(t);
+			if(!t){
+				while(!t){
+					myArr = new File("./Data/" +name+o+".arr");
+					o++;
+					t = myArr.createNewFile();
+					//System.out.println(t);
+				}
+				name = name+(o-1);
 			}
-			name = name+o;
+			
 		}
 		catch(IOException e){
 			System.out.println(e);
@@ -225,7 +237,7 @@ class Arr <dataType> {
       out += data[0];
     }
     for(int i =1; i<data.length; i++){
-      out += ", " + data[i];
+      out += "," + data[i];
     }
     out += " ]";
     return out;
