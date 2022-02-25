@@ -124,7 +124,6 @@ class Arr <dataType> {
     set0();
   }
 
-
 	private String load(String path){
 		//@SuppressWarnings("unchecked")
 		try{
