@@ -13,6 +13,7 @@ class Arr <dataType> {
   private Object[] data0;
   private int len =0;
 	private int id;
+	private final Path config = Paths.get("./config/Arr.config");
 
 	
  
@@ -22,9 +23,9 @@ class Arr <dataType> {
     len = d-1;
   }
 
-	public Arr(String path){ 
+	public Arr(Path path){ 
 		try{
-			String temp = load(path);
+			String temp = load(path.toString());
 			temp = temp.substring(1,temp.length()-1);
 			int t =0;
 			for(int i =0; i<temp.length(); i++){
@@ -145,10 +146,14 @@ class Arr <dataType> {
 		}
 	}
 
-	public void save(String name){
+	public String save(String name, boolean regnal){
 
-		Path path = makeFile(name);
-		File file = new File(path.toString());
+		String path = makeFile(name,"./Data/",regnal);
+		if(path == "-1"){
+			System.out.println("File alredy exists");
+			return "-1";
+		}
+		File file = new File(path);
 		try{
 			FileWriter fr = new FileWriter(file, false);
 			fr.write("<" + id+ "," + this.data.length + ">=[");
@@ -173,37 +178,131 @@ class Arr <dataType> {
 				break;
 			}
 		}
+		return path;
+
+	}
+	
+	public String save(String name){
+
+		String path = makeFile(name,"./Data/",true);
+		File file = new File(path);
+		try{
+			FileWriter fr = new FileWriter(file, false);
+			fr.write("<" + id+ "," + this.data.length + ">=[");
+			id++;
+			fr.close();
+		}
+		catch(IOException e){
+			System.out.println("please enter a valid path");
+		}
+		for(int i=0;i<data.length;i++){
+			try{
+				FileWriter fr = new FileWriter(file, true);
+
+				if(i != data.length-1){
+					fr.write("{" + data[i]+"},");
+				} else{
+					fr.write("{" + data[i]+"}]");
+				}
+				fr.close();
+			}
+			catch(IOException e){
+				break;
+			}
+		}
+		return path;
 
 	}
 
-	private Path makeFile(String name){
+	public String save(Path p){
+		String path = makeFile(p.toString());
+		if(path == "-1"){
+			System.out.println("File alredy exists");
+			return "-1";
+		}
+		File file = new File(path);
+		try{
+			FileWriter fr = new FileWriter(file, false);
+			fr.write("<" + id+ "," + this.data.length + ">=[");
+			id++;
+			fr.close();
+		}
+		catch(IOException e){
+			System.out.println("please enter a valid path");
+		}
+		for(int i=0;i<data.length;i++){
+			try{
+				FileWriter fr = new FileWriter(file, true);
+
+				if(i != data.length-1){
+					fr.write("{" + data[i]+"},");
+				} else{
+					fr.write("{" + data[i]+"}]");
+				}
+				fr.close();
+			}
+			catch(IOException e){
+				break;
+			}
+		}
+		return path;
+	}
+
+	private String makeFile(String name, String loc, boolean regnal){
 		@SuppressWarnings("unchecked")
 		int o =1;
 		File myArr;
 		try{
-			myArr = new File("./Data/"+ name +".arr");
+			myArr = new File(loc+ name +".arr");
 				/*name = name+o;
 				o++;
 				makeFile(name);*/
 			boolean t = myArr.createNewFile();
-			if(!t){
-				while(!t){
-					myArr = new File("./Data/" +name+o+".arr");
-					o++;
-					t = myArr.createNewFile();
-					//System.out.println(t);
+			if(regnal){
+				if(!t){
+					while(!t){
+						myArr = new File("./Data/" +name+o+".arr");
+						o++;
+						t = myArr.createNewFile();
+						//System.out.println(t);
+					}
+					name = name+(o-1);
 				}
-				name = name+(o-1);
+			}else if(!t){
+				return "-1";
 			}
 			
 		}
 		catch(IOException e){
 			System.out.println(e);
 		}
-		Path path = Paths.get("./Data/"+name+".arr");
-		return path;
+		Path path = Paths.get(loc+name+".arr");
+		return path.toString();
+	}
+	
+	private String makeFile(String path){
+		@SuppressWarnings("unchecked")
+		File myArr;
+		try{
+			myArr = new File(path+".arr");
+				/*name = name+o;
+				o++;
+				makeFile(name);*/
+			boolean t = myArr.createNewFile();
+			if(!t){
+				return "-1";
+			}
+		}
+		catch(IOException e){
+			System.out.println(e);
+		}
+		return path+".arr";
 	}
 
+	public  delete(Path path){
+		
+	}
+	
 	public String remove(int index){
 		@SuppressWarnings("unchecked")
 		String out = "" +data[index];
